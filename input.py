@@ -1,7 +1,10 @@
 import pandas as pd
 from bs4 import BeautifulSoup
 import nltk
-from sklearn.naive_bayes import MultinomialNB
+from datetime import datetime
+from sklearn.naive_bayes import MultinomialNB, BernoulliNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import LinearSVC, NuSVC
 from nltk.classify.scikitlearn import SklearnClassifier
 from sumy.nlp.stemmers.czech import stem_word
 from sumy.utils import get_stop_words
@@ -64,7 +67,9 @@ def filter_stem(words):
             continue
     return words_stem
 
-# START	
+# START
+startTime = datetime.now()
+
 # read input
 input_file_path = 'vzorek.xlsx'
 df = pd.read_excel(input_file_path, sheet_name='zdroj')
@@ -95,3 +100,27 @@ MNB_classifier.train(training_set)
 mnb = (nltk.classify.accuracy(MNB_classifier, testing_set)) * 100
 mnb = round(mnb, 1)
 print(mnb)
+
+BernoulliNB_classifier = SklearnClassifier(BernoulliNB())
+# BernoulliNB_classifier._vectorizer.sort = False
+BernoulliNB_classifier.train(training_set)
+bnb = (nltk.classify.accuracy(BernoulliNB_classifier, testing_set)) * 100
+bnb = round(bnb, 1)
+print(bnb)
+
+LogisticRegression_classifier = SklearnClassifier(LogisticRegression())
+# LogisticRegression_classifier._vectorizer.sort = False
+LogisticRegression_classifier.train(training_set)
+lr = (nltk.classify.accuracy(LogisticRegression_classifier, testing_set)) * 100
+lr = round(lr, 1)
+print(lr)
+
+LinearSVC_classifier = SklearnClassifier(LinearSVC())
+# LinearSVC_classifier._vectorizer.sort = False
+LinearSVC_classifier.train(training_set)
+lsvc = (nltk.classify.accuracy(LinearSVC_classifier, testing_set)) * 100
+lsvc = round(lsvc, 1)
+print(lsvc)
+
+
+print(datetime.now() - startTime)
