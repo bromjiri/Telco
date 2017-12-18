@@ -39,13 +39,16 @@ class Features:
         # create bestwords
         # self.create_bestwords()
 
-        # create features
-        for index, row in self.df.iterrows():
-            try:
-                feature = self.create_features(row['filtered'])
-                self.features.append((feature, row['obltrans_pz']))
-            except:
-                pass
+        # create features list
+        # for index, row in self.df.iterrows():
+        #     try:
+        #         feature = self.create_features(row['filtered'])
+        #         self.features.append((feature, row['Label_Major']))
+        #     except:
+        #         pass
+
+        # create features data frame
+        self.df['features'] = self.df['filtered'].apply(self.create_features)
 
         # print
         # for feature in self.features:
@@ -53,6 +56,9 @@ class Features:
 
     def create_features(self, text):
         return dict([(word, True) for word in text])
+
+    def get_df(self):
+        return self.df
 
     def get_features(self):
         return self.features
